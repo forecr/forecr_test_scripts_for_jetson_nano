@@ -19,10 +19,11 @@ if [ -d "$SCRIPTS_FOLDER" ]; then
 		SCRIPTS_FOLDER="$SCRIPTS_FOLDER/"
 	fi
 	echo "$SCRIPTS_FOLDER folder exists"
-	chmod +x csi_*.sh
-	chmod +x enable_*.sh
-	chmod +x test_digital_*.sh
-	chmod +x M.2_Key_B_QualComm.sh
+	chmod +x $SCRIPTS_FOLDER/csi_*.sh
+	chmod +x $SCRIPTS_FOLDER/enable_*.sh
+	chmod +x $SCRIPTS_FOLDER/iperf3_*.sh
+	chmod +x $SCRIPTS_FOLDER/test_digital_*.sh
+	chmod +x $SCRIPTS_FOLDER/M.2_Key_B_QualComm.sh
 else
 	echo "$SCRIPTS_FOLDER folder does not exist"
 	echo "Quitting ..."
@@ -61,18 +62,19 @@ function test_menu {
 		echo "*** Production Test Menu ***"
 		echo "1) Previous Tests"
 		echo "2) Disks (M.2 SSD and SD card) Test"
-		echo "3) Network Test"
-		echo "4) USB Test"
-		echo "5) CSI Test"
-		echo "6) RS-232 Test"
-		echo "7) Digital Out Test"
-		echo "8) Digital In-0 Test"
-		echo "9) Digital In-1 Test"
-		echo "10) RS-422 Test"
-		echo "11) RS-485 Write Test"
-		echo "12) RS-485 Read Test"
-		echo "13) M.2 Key-B Test"
-		echo "14) M.2 Key-E Test"
+		echo "3) Local Network Test (iperf3)"
+		echo "4) Public Network Test (ping)"
+		echo "5) USB Test"
+		echo "6) CSI Test"
+		echo "7) RS-232 Test"
+		echo "8) Digital Out Test"
+		echo "9) Digital In-0 Test"
+		echo "10) Digital In-1 Test"
+		echo "11) RS-422 Test"
+		echo "12) RS-485 Write Test"
+		echo "13) RS-485 Read Test"
+		echo "14) M.2 Key-B Test"
+		echo "15) M.2 Key-E Test"
 		read -p "Type the test number (or quit) [1/.../q]: " choice
 		echo ""
 
@@ -87,6 +89,20 @@ function test_menu {
 				gnome-terminal -- gnome-disks
 				;;
 			3 )
+				read -p "Server or Client (s/c): " network_choice
+				case $network_choice in
+					[Ss]* )
+						gnome-terminal -- $SCRIPTS_FOLDER/iperf3_server.sh
+						;;
+					[Cc]* )
+						gnome-terminal -- $SCRIPTS_FOLDER/iperf3_client.sh
+						;;
+					* )
+						echo "Wrong choice"
+						;;
+				esac
+				;;
+			4 )
 				echo "(1/2) Ping Test"
 				ping -c 5 www.google.com
 				echo "(2/2) Network Speed Test"
@@ -96,50 +112,50 @@ function test_menu {
 				echo "Check the ethernet connection ($net_name) speed as 1000 Mb/s"
 				sudo ethtool $net_name | grep Speed
 				;;
-			4 )
+			5 )
 				echo "Check both USB devices connected to 'Linux Foundation 3.0 root hub'"
 				gnome-terminal -- watch -n 1 lsusb
 				;;
-			5 )
+			6 )
 				gnome-terminal -- $SCRIPTS_FOLDER/csi_1_test.sh
 				sleep 2
 				gnome-terminal -- $SCRIPTS_FOLDER/csi_2_test.sh
 				;;
-			6 )
+			7 )
 				$SCRIPTS_FOLDER/enable_rs232_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200
 				;;
-			7 )
+			8 )
 				$SCRIPTS_FOLDER/enable_digital_out_nano.sh
 				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_out_multi_nano.sh
 				;;
-			8 )
+			9 )
 				$SCRIPTS_FOLDER/enable_digital_in_nano.sh
 				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in0_nano.sh
 				;;
-			9 )
+			10 )
 				$SCRIPTS_FOLDER/enable_digital_in_nano.sh
 				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in1_nano.sh
 				;;
-			10 )
+			11 )
 				$SCRIPTS_FOLDER/enable_rs422_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200
 				;;
-			11 )
+			12 )
 				$SCRIPTS_FOLDER/enable_rs485_nano.sh
 				$SCRIPTS_FOLDER/enable_rs485_write_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200 -w RS485
 				;;
-			12 )
+			13 )
 				$SCRIPTS_FOLDER/enable_rs485_nano.sh
 				$SCRIPTS_FOLDER/enable_rs485_read_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200 -w RS485
 				;;
-			13 )
+			14 )
 				$SCRIPTS_FOLDER/M.2_Key_B_QualComm.sh
 				sudo gnome-terminal -- watch -n 1 lsusb
 				;;
-			14 )
+			15 )
 				sudo gnome-terminal -- watch -n 1 lspci
 				sudo gnome-terminal -- watch -n 1 lsusb
 				;;
