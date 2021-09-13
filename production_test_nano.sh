@@ -66,15 +66,15 @@ function test_menu {
 		echo "4) Public Network Test (ping)"
 		echo "5) USB Test"
 		echo "6) CSI Test"
-		echo "7) RS-232 Test"
-		echo "8) Digital Out Test"
-		echo "9) Digital In-0 Test"
-		echo "10) Digital In-1 Test"
-		echo "11) RS-422 Test"
-		echo "12) RS-485 Write Test"
-		echo "13) RS-485 Read Test"
-		echo "14) M.2 Key-B Test"
-		echo "15) M.2 Key-E Test"
+		echo "7) M.2 Key-E Test"
+		echo "8) M.2 Key-B Test"
+		echo "9) RS-232 Test"
+		echo "10) RS-422 Test"
+		echo "11) RS-485 Write Test"
+		echo "12) RS-485 Read Test"
+		echo "13) Digital Out Test"
+		echo "14) Digital In-0 Test"
+		echo "15) Digital In-1 Test"
 		read -p "Type the test number (or quit) [1/.../q]: " choice
 		echo ""
 
@@ -122,42 +122,42 @@ function test_menu {
 				gnome-terminal -- $SCRIPTS_FOLDER/csi_2_test.sh
 				;;
 			7 )
+				sudo gnome-terminal -- watch -n 1 lspci
+				sudo gnome-terminal -- watch -n 1 lsusb
+				;;
+			8 )
+				$SCRIPTS_FOLDER/M.2_Key_B_QualComm.sh
+				sudo gnome-terminal -- watch -n 1 lsusb
+				;;
+			9 )
 				$SCRIPTS_FOLDER/enable_rs232_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200
 				;;
-			8 )
-				$SCRIPTS_FOLDER/enable_digital_out_nano.sh
-				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_out_multi_nano.sh
-				;;
-			9 )
-				$SCRIPTS_FOLDER/enable_digital_in_nano.sh
-				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in0_nano.sh
-				;;
 			10 )
-				$SCRIPTS_FOLDER/enable_digital_in_nano.sh
-				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in1_nano.sh
-				;;
-			11 )
 				$SCRIPTS_FOLDER/enable_rs422_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200
 				;;
-			12 )
+			11 )
 				$SCRIPTS_FOLDER/enable_rs485_nano.sh
 				$SCRIPTS_FOLDER/enable_rs485_write_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200 -w RS485
 				;;
-			13 )
+			12 )
 				$SCRIPTS_FOLDER/enable_rs485_nano.sh
 				$SCRIPTS_FOLDER/enable_rs485_read_nano.sh
 				sudo gnome-terminal -- gtkterm -p /dev/ttyTHS1 -s 115200 -w RS485
 				;;
+			13 )
+				$SCRIPTS_FOLDER/enable_digital_out_nano.sh
+				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_out_multi_nano.sh
+				;;
 			14 )
-				$SCRIPTS_FOLDER/M.2_Key_B_QualComm.sh
-				sudo gnome-terminal -- watch -n 1 lsusb
+				$SCRIPTS_FOLDER/enable_digital_in_nano.sh
+				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in0_nano.sh
 				;;
 			15 )
-				sudo gnome-terminal -- watch -n 1 lspci
-				sudo gnome-terminal -- watch -n 1 lsusb
+				$SCRIPTS_FOLDER/enable_digital_in_nano.sh
+				gnome-terminal -- $SCRIPTS_FOLDER/test_digital_in1_nano.sh
 				;;
 			[Qq]* )
 				echo "Quitting ..."
