@@ -4,5 +4,9 @@ if [ "$(whoami)" != "root" ] ; then
 	exit 1
 fi
 
+sudo echo 504 > /sys/class/gpio/export
+sudo echo in > /sys/class/gpio/gpio504/direction
+
 watch -n 0.1 sudo cat /sys/class/gpio/gpio504/value
 
+sudo echo 504 > /sys/class/gpio/unexport
