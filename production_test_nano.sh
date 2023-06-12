@@ -148,7 +148,7 @@ function test_menu {
 				;;
 			8 )
 				echo "Key-E Test"
-				sudo gnome-terminal -- watch -n 0.1 lspci
+				#sudo gnome-terminal -- watch -n 0.1 lspci # Not Available
 				sudo gnome-terminal -- watch -n 0.1 lsusb
 				;;
 			9 )
